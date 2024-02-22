@@ -8,10 +8,7 @@ import org.example.validators.ValidatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -97,11 +94,30 @@ public class UserController {
             method = RequestMethod.GET,
             value = "/user/{username}"
     )
-    public ResponseEntity<User> getUser(@RequestBody String username) {
+    public ResponseEntity<User> getUser(@PathVariable String username) {
         if(username == null || username.isEmpty())
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         Optional<User> optionalUser = userRepository.findById(username);
         return optionalUser.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @RequestMapping(
+            method = RequestMethod.DELETE,
+            value = "/user/deleteUser/{username}"
+    )
+    public ResponseEntity<String> deleteUser(@PathVariable String username) {
+        if(username == null || username.isEmpty())
+            return new ResponseEntity<>("Request is malformed", HttpStatus.BAD_REQUEST);
+        Optional<User> optionalUser = userRepository.findById(username);
+        if(optionalUser.isEmpty())
+            return new ResponseEntity<>("User with that name does not exist", HttpStatus.NOT_FOUND);
+        User toDelete = optionalUser.get();
+        try {
+            userRepository.delete(toDelete);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Something went wrong\nCheck user deletion", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("User " + username + " deleted successfully", HttpStatus.OK);
     }
 }
