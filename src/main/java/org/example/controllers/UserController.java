@@ -90,6 +90,14 @@ public class UserController {
         return new ResponseEntity<>("User " + loginData.getUsername() + " is now logged in", HttpStatus.OK);
     }
 
+    /**
+     * Controller method for getting a user
+     *
+     * @param username Username of user to be retrieved
+     * @return HTTP 200 - User retrieved successfully
+     *         HTTP 400 - Username is malformed
+     *         HTTP 404 - User does not exist
+     */
     @RequestMapping(
             method = RequestMethod.GET,
             value = "/user/{username}"
@@ -102,6 +110,15 @@ public class UserController {
         return optionalUser.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    /**
+     * Controller method for deleting a user
+     *
+     * @param username Username of user to be deleted
+     * @return HTTP 200 - User deleted successfully
+     *         HTTP 400 - Username is malformed
+     *         HTTP 404 - User not found
+     *         HTTP 500 - Database failure
+     */
     @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/user/deleteUser/{username}"
