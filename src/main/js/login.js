@@ -5,8 +5,7 @@ const passwordField = document.getElementById("pass");
 const form = document.getElementById("form");
 const errorMessage = document.getElementById("formerror");
 
-function submit(event) {
-    event.preventDefault();
+function submit() {
 
     var username = usernameField.value;
     var password = passwordField.value;
@@ -40,6 +39,9 @@ function submit(event) {
         if(!data.success) {
             errorMessage.innerHTML = data
             errorMessage.style.color = "red"
+        } else {
+            form.submit();
         }
     })
+    return true;
 }
