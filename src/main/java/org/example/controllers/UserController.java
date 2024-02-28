@@ -80,9 +80,6 @@ public class UserController {
                 loginData.getUsername() == null || loginData.getPassword() == null)
             return new ResponseEntity<>("Corrupted input", HttpStatus.BAD_REQUEST);
 
-        if(!ValidatorService.validatePassword(loginData.getPassword()))
-            return new ResponseEntity<>("Invalid password format", HttpStatus.BAD_REQUEST);
-
         Optional<User> optionalUser = userRepository.findById(loginData.getUsername());
         if(optionalUser.isEmpty())
             return new ResponseEntity<>("Account does not exist or could not be found", HttpStatus.NOT_FOUND);
