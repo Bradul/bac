@@ -1,0 +1,38 @@
+.header {
+    width:100%;
+    height:10%;
+    background-color: aqua;
+    border-radius: 0px 0px 10px 10px;
+    border-style: solid;
+    border-color: black;
+}
+
+.navbar {
+    margin: 0px 10px 5px 10px;
+    list-style: none;
+    padding: 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.navbaritem {
+    list-style: none;
+    margin-left: 2rem;
+    padding: 8px;
+}
+
+.navbaritem:first-child {
+    margin-right: auto;
+}
+
+.navbartext {
+    color:black;
+    text-align: center;
+    text-decoration: none;
+}
+
+.navbaritem:hover {
+    background-color: white;
+    transition: 0.2s;
+}

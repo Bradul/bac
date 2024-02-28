@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+// TODO - For early testing purposes: Allow ALL requests from ALL origins. This should be removed in later stages of the project
+@CrossOrigin(origins = "*")
 @RestController
 public class UserController {
     private UserRepository userRepository;
@@ -85,8 +87,10 @@ public class UserController {
         if(optionalUser.isEmpty())
             return new ResponseEntity<>("Account does not exist or could not be found", HttpStatus.NOT_FOUND);
 
+        User user = optionalUser.get();
+        if(!user.getPassword().equals(loginData.getPassword()))
+            return new ResponseEntity<>("Incorrect password", HttpStatus.UNAUTHORIZED);
         // TODO - Implement authentication security logic
-
         return new ResponseEntity<>("User " + loginData.getUsername() + " is now logged in", HttpStatus.OK);
     }
 
