@@ -14,12 +14,12 @@ import java.util.List;
 @EqualsAndHashCode
 @ToString
 @Document(collection = "problems")
-public class Problem {
+public class MathProblem {
     private String statement;
     private String answer;
     private List<SubProblem> subProblemList;
 
-    public Problem(String statement, String answer) {
+    public MathProblem(String statement, String answer) {
         this.statement = statement;
         this.answer = answer;
         this.subProblemList = new ArrayList<>();
