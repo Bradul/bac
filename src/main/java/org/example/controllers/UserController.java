@@ -4,7 +4,6 @@ import org.example.User.User;
 import org.example.User.UserRepository;
 import org.example.requestmodels.LoginData;
 import org.example.requestmodels.UserData;
-import org.example.services.CompilerService;
 import org.example.services.ValidatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -140,22 +139,4 @@ public class UserController {
         return new ResponseEntity<>("User " + username + " deleted successfully", HttpStatus.OK);
     }
 
-    // TODO - logic for filepath, language, code; Also make non static
-    @RequestMapping(
-            method = RequestMethod.POST,
-            value = "/code",
-            consumes = {"application/json"}
-    )
-    public ResponseEntity<String> compileCode(@RequestBody String code) {
-        if(code == null)
-            return new ResponseEntity<>("Request is malformed", HttpStatus.BAD_REQUEST);
-        try {
-            String filePath = "";
-            String language = "";
-            //String output = CompilerService.compileCode(filePath, language, code);
-            return new ResponseEntity<>("Accepted", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
 }
