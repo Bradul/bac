@@ -51,7 +51,7 @@ public class EvaluationServiceTest {
 
         List<Test> tests = new ArrayList<>(List.of(test1, test2, test3, test4, test5));
 
-        CSProblem problem = new CSProblem(1, "Vector_sum", "Sum all elements", 100, tests);
+        CSProblem problem = new CSProblem(1, "Radu Vasile", "Vector_sum", "Sum all elements", 100, tests);
         try {
             assertEquals(100.0, evaluationService.evaluateSubmission(code, language, userName, problem));
             tests.add(incorrect);

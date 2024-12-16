@@ -17,17 +17,18 @@ import java.util.regex.Pattern;
 public class User {
     @Id
     private String username;
-
     @Field("email")
     private String email;
-
     @Field("password")
     private String password;
+    @Field("role")
+    private Role role;
 
     public User(UserData userData) {
         this.username = userData.getUsername();
         this.email = userData.getEmail();
         this.password = userData.getPassword();
+        this.role = Role.STUDENT;
     }
 
     @Override
@@ -36,6 +37,7 @@ public class User {
                 "username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", role='" + role.toString() + '\'' +
                 '}';
     }
 }

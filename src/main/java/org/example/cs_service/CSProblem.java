@@ -15,6 +15,8 @@ import java.util.List;
 public class CSProblem {
     @Id
     private int id;
+    @Field
+    private String author;
     @Field("name")
     private String name;
     @Field("statement")
@@ -24,8 +26,9 @@ public class CSProblem {
     @Field("tests")
     private List<Test> tests;
 
-    public CSProblem(int id, String name, String statement, int timeLimit, List<Test> tests) {
+    public CSProblem(int id, String author, String name, String statement, int timeLimit, List<Test> tests) {
         this.id = id;
+        this.author = author;
         this.name = name;
         this.statement = statement;
         this.timeLimit = timeLimit;
