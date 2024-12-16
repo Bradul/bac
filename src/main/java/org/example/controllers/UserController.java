@@ -4,7 +4,6 @@ import org.example.User.User;
 import org.example.User.UserRepository;
 import org.example.requestmodels.LoginData;
 import org.example.requestmodels.UserData;
-import org.example.services.CompilerService;
 import org.example.services.ValidatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

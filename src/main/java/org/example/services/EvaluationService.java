@@ -35,9 +35,9 @@ public class EvaluationService {
         int points = 0, possible = 0;
         List<Test> tests = problem.getTests();
         String codeFilePath = compilerService.createTempFile(code, language, userName, problem.getName());
-        String executeCommand = compilerService.compileCode(codeFilePath, language, 5000);
+        String executeCommand = compilerService.compileCode(codeFilePath, language, 20000);
         for(Test test : tests) {
-            String output = compilerService.executeCode(executeCommand, test.getInput(), problem.getTimeLimit());
+            String output = compilerService.executeCode(executeCommand, test.getInput(), problem.getTimeLimit(), 20000);
             String expected = test.getOutput();
             possible += test.getPointsWorth();
             if(expected.equals(output))

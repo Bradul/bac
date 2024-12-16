@@ -6,6 +6,7 @@ import org.example.exceptions.TimeLimitExceededException;
 import org.example.exceptions.UnrecognizedLanguageException;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 @NoArgsConstructor
@@ -98,7 +99,7 @@ public class CompilerService {
      * @throws TimeLimitExceededException If the execution of the program exceeds the allotted time.
      * @throws CompilationErrorException If the code does not compile.
      */
-    public String compileCode(String filePath, String language, int timeLimit)
+    public String compileCode(String filePath, String language, int globalTimeLimit)
             throws UnrecognizedLanguageException, IOException, InterruptedException, TimeLimitExceededException, CompilationErrorException {
         filePath = convertToLinuxPath(filePath);
         String compileCommand = "";
@@ -108,7 +109,7 @@ public class CompilerService {
             case "cpp" -> {
                 String outFile = filePath.replace(".cpp", "");
                 compileCommand = "wsl g++ -o " + outFile + " " + filePath;
-                executeCommand = "wsl " + outFile;
+                executeCommand = "wsl time " + outFile;
             }
             case "java" -> {
                 compileCommand = "javac " + filePath;
@@ -117,10 +118,9 @@ public class CompilerService {
             default -> throw new UnrecognizedLanguageException();
         }
 
-        int compileTimeLimit = timeLimit * 10;
 
         Process compileProcess = Runtime.getRuntime().exec(compileCommand);
-        if(!waitForProcess(compileProcess, compileTimeLimit)) {
+        if(!waitForProcess(compileProcess, globalTimeLimit)) {
             throw new TimeLimitExceededException("Compilation timed out.");
         }
         String compileErrors = readStream(compileProcess.getErrorStream());
@@ -131,7 +131,7 @@ public class CompilerService {
         return executeCommand;
     }
 
-    public String executeCode(String executeCommand, String input, int timeLimit)
+    public String executeCode(String executeCommand, String input, int timeLimit, int globalTimeLimit)
             throws IOException, InterruptedException, TimeLimitExceededException {
         ProcessBuilder executeProcessBuilder = new ProcessBuilder(executeCommand.split(" "));
         //executeProcessBuilder.directory(new File(filePath).getParentFile());
@@ -147,10 +147,29 @@ public class CompilerService {
         }
 
         Process executeProcess = executeProcessBuilder.start();
-        if(!waitForProcess(executeProcess, timeLimit)) {
-            throw new TimeLimitExceededException("Execution timed out.");
+        if(!waitForProcess(executeProcess, globalTimeLimit)) {
+            throw new TimeLimitExceededException("Process time limit exceeded. Please contact an administrator.");
         }
 
-        return readStream(executeProcess.getInputStream());
+        // Remove effects of UNIX time command.
+        String rawOutput = readStream(executeProcess.getInputStream());
+        int truncate = rawOutput.length();
+        for(int i = 0;i < 3;i++) {
+            truncate = rawOutput.lastIndexOf('\n', truncate - 1);
+        }
+
+        int finOutput = rawOutput.lastIndexOf('\n', truncate - 1);
+        String output = rawOutput.substring(0, finOutput+1);
+        String time = rawOutput.substring(finOutput+1, truncate);
+        String[] secAndMs = time.split("m")[1].split("\\.");
+        int sec = Integer.parseInt(secAndMs[0]);
+        int ms = Integer.parseInt(secAndMs[1].substring(0, secAndMs[1].length()-1));
+        int actualMs = sec*1000+ms;
+        System.out.println("Process took " + actualMs + " ms to complete.");
+
+        if(actualMs > timeLimit)
+            throw new TimeLimitExceededException("Execution timed out.");
+
+        return output;
     }
 }

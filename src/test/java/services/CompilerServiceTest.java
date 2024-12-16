@@ -36,7 +36,7 @@ public class CompilerServiceTest {
         try {
             String filePath = compilerService.createTempFile(code, language, userName, problem);
             String executeCommand = compilerService.compileCode(filePath, language, 10000);
-            String output = compilerService.executeCode(executeCommand, input, 10000);
+            String output = compilerService.executeCode(executeCommand, input, 100, 10000);
             assertEquals("Hello world!\n", output);
         } catch (IOException | UnrecognizedLanguageException | CompilationErrorException | TimeLimitExceededException |
                  InterruptedException e) {
@@ -63,7 +63,7 @@ public class CompilerServiceTest {
         try {
             String filePath = compilerService.createTempFile(code, language, userName, problem);
             String executeCommand = compilerService.compileCode(filePath, language, 10000);
-            String output = compilerService.compileCode(executeCommand, input, 10000);
+            String output = compilerService.executeCode(executeCommand, input, 100, 10000);
             assertEquals("Hello, " + input + "\n", output);
         } catch (IOException | UnrecognizedLanguageException | CompilationErrorException | TimeLimitExceededException |
                  InterruptedException e) {
@@ -90,7 +90,7 @@ public class CompilerServiceTest {
         try {
             String filePath = compilerService.createTempFile(code, language, userName, problem);
             String executeCommand = compilerService.compileCode(filePath, language, 10000);
-            String output = compilerService.compileCode(executeCommand, input, 10000);
+            String output = compilerService.executeCode(executeCommand, input, 100, 10000);
             assertEquals("305\n", output);
         } catch (IOException | UnrecognizedLanguageException | CompilationErrorException | TimeLimitExceededException |
                  InterruptedException e) {
@@ -126,7 +126,7 @@ public class CompilerServiceTest {
         try {
             String filePath = compilerService.createTempFile(code, language, userName, problem);
             String executeCommand = compilerService.compileCode(filePath, language, 10000);
-            String output = compilerService.compileCode(executeCommand, input, 10000);
+            String output = compilerService.executeCode(executeCommand, input, 100, 10000);
             assertEquals("15\n", output);
         } catch (IOException | UnrecognizedLanguageException | CompilationErrorException | TimeLimitExceededException |
                  InterruptedException e) {
